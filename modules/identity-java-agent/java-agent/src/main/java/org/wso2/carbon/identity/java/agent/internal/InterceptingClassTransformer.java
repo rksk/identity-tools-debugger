@@ -21,6 +21,7 @@ package org.wso2.carbon.identity.java.agent.internal;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
+import javassist.bytecode.AccessFlag;
 import javassist.runtime.Desc;
 import javassist.scopedpool.ScopedClassPoolFactoryImpl;
 import javassist.scopedpool.ScopedClassPoolRepositoryImpl;
@@ -48,6 +49,10 @@ public class InterceptingClassTransformer implements ClassFileTransformer {
     private static final Logger log = Logger.getLogger(InterceptingClassTransformer.class.getName());
     public static final String METHOD_LISTENER_TEMPLATE = "org.wso2.carbon.identity.java.agent.internal." +
             "MethodEntryListener.methodEntered(\"%s\", \"%s\",\"%s\", $sig, $args );";
+    public static final String METHOD_BEFORE_LISTENER_TEMPLATE = "org.wso2.carbon.identity.java.agent.internal." +
+            "MethodEntryListener.methodBefore(\"%s\", \"%s\",\"%s\", $sig, $args );";
+    public static final String METHOD_AFTER_LISTENER_TEMPLATE = "org.wso2.carbon.identity.java.agent.internal." +
+            "MethodEntryListener.methodAfter(\"%s\", \"%s\",\"%s\", $sig, $args );";
 
     private final Map<String, InterceptorConfig> interceptorMap = new HashMap<>();
     private ScopedClassPoolFactoryImpl scopedClassPoolFactory = new ScopedClassPoolFactoryImpl();
@@ -100,14 +105,21 @@ public class InterceptingClassTransformer implements ClassFileTransformer {
                 int transformedMethodCounts = 0;
 
                 for (CtMethod method : methods) {
+                    if (config.isAllPublicMethods()) {
+                        if (method.getMethodInfo().getAccessFlags() == AccessFlag.PUBLIC) {
+                            config.addMethodConfigs(method.getName(), method.getSignature(), true, true);
+                        }
+                    }
                     for (MethodInfoConfig methodInfoConfig : methodInfoConfigs) {
                         if (methodInfoConfig.verifyMethod(method.getName(), method.getSignature())) {
                             if (methodInfoConfig.isInsertBefore()) {
                                 method.insertBefore(String.format(METHOD_LISTENER_TEMPLATE, className, method.getName(),
                                         method.getSignature()));
+                                method.insertBefore(String.format(METHOD_BEFORE_LISTENER_TEMPLATE, className, method.getName(),
+                                        method.getSignature()));
                             }
                             if (methodInfoConfig.isInsertAfter()) {
-                                method.insertAfter(String.format(METHOD_LISTENER_TEMPLATE, className, method.getName(),
+                                method.insertAfter(String.format(METHOD_AFTER_LISTENER_TEMPLATE, className, method.getName(),
                                         method.getSignature()));
                             }
                             transformedMethodCounts++;

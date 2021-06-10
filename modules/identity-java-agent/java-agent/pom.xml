@@ -43,6 +43,11 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.consensys.cava</groupId>
+            <artifactId>cava-toml</artifactId>
+<!--            <scope>provided</scope>-->
+        </dependency>
         <!-- Testing related dependencies -->
         <dependency>
             <groupId>org.testng</groupId>

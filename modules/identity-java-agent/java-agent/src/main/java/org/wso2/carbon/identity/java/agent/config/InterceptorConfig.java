@@ -27,6 +27,7 @@ import java.util.List;
 public class InterceptorConfig {
 
     private String className;
+    private boolean isAllPublicMethods;
     private List<MethodInfoConfig> methodInfoConfigs = new ArrayList<>();
 
     /**
@@ -70,5 +71,15 @@ public class InterceptorConfig {
     public List<MethodInfoConfig> getMethodInfoConfigs() {
 
         return methodInfoConfigs;
+    }
+
+    public boolean isAllPublicMethods() {
+
+        return isAllPublicMethods;
+    }
+
+    public void setAllPublicMethods(boolean allPublicMethods) {
+
+        isAllPublicMethods = allPublicMethods;
     }
 }

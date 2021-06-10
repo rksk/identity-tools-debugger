@@ -21,6 +21,8 @@ package org.wso2.carbon.identity.java.agent.connect;
 import org.wso2.carbon.identity.java.agent.host.InterceptionEventType;
 import org.wso2.carbon.identity.java.agent.host.MethodContext;
 
+import java.util.List;
+
 /**
  * Listener for instrumentation event.
  * Should be implemented by any class want to listen to any execution event on class or method.
@@ -35,4 +37,6 @@ public interface InterceptionListener {
      * @param methodContext Instrumentation context details for a Method.
      */
     void handleEvent(InterceptionEventType type, MethodContext methodContext);
+
+    List<String> getInterceptorNames();
 }

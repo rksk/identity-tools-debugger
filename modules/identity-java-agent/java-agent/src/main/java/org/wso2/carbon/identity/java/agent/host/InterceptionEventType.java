@@ -22,5 +22,5 @@ package org.wso2.carbon.identity.java.agent.host;
  * Type of the interception event.
  */
 public enum InterceptionEventType {
-    METHOD_ENTRY
+    METHOD_ENTRY, METHOD_BEFORE, METHOD_AFTER
 }

@@ -51,4 +51,50 @@ public class MethodEntryListener {
         }
     }
 
+    /**
+     * This method will be injected by {@link InterceptingClassTransformer} upon matching the method name and signature.
+     *
+     * @param className  The class name which was called.
+     * @param methodName The method name which was called.
+     * @param signature  The signature of the method being called.
+     * @param sig        The types of the arguments.
+     * @param args       The arguments (values) of the method.
+     */
+    public static void methodBefore(String className, String methodName, String signature,
+                                    Class[] sig, Object[] args) {
+
+        InterceptionEngine engine = AgentHelper.getInstance().getInterceptionEngine();
+        if (engine instanceof EventPublisher) {
+            Thread thread = Thread.currentThread();
+            MethodContext methodContext = new MethodContext(thread, methodName, signature);
+            methodContext.setArgumentValues(args);
+            methodContext.setArgumentTypes(sig);
+            methodContext.setClassName(className);
+            ((EventPublisher) engine).fireEvent(InterceptionEventType.METHOD_BEFORE, methodContext);
+        }
+    }
+
+    /**
+     * This method will be injected by {@link InterceptingClassTransformer} upon matching the method name and signature.
+     *
+     * @param className  The class name which was called.
+     * @param methodName The method name which was called.
+     * @param signature  The signature of the method being called.
+     * @param sig        The types of the arguments.
+     * @param args       The arguments (values) of the method.
+     */
+    public static void methodAfter(String className, String methodName, String signature,
+                                     Class[] sig, Object[] args) {
+
+        InterceptionEngine engine = AgentHelper.getInstance().getInterceptionEngine();
+        if (engine instanceof EventPublisher) {
+            Thread thread = Thread.currentThread();
+            MethodContext methodContext = new MethodContext(thread, methodName, signature);
+            methodContext.setArgumentValues(args);
+            methodContext.setArgumentTypes(sig);
+            methodContext.setClassName(className);
+            ((EventPublisher) engine).fireEvent(InterceptionEventType.METHOD_AFTER, methodContext);
+        }
+    }
+
 }

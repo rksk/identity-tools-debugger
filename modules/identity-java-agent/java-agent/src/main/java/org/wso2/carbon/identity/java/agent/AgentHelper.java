@@ -18,6 +18,8 @@
 
 package org.wso2.carbon.identity.java.agent;
 
+import org.wso2.carbon.identity.java.agent.config.AgentConfig;
+import org.wso2.carbon.identity.java.agent.config.InterceptorConfigReader;
 import org.wso2.carbon.identity.java.agent.connect.InterceptionEngine;
 import org.wso2.carbon.identity.java.agent.host.DefaultInterceptionEngine;
 
@@ -26,12 +28,14 @@ import org.wso2.carbon.identity.java.agent.host.DefaultInterceptionEngine;
  */
 public class AgentHelper {
 
-    private InterceptionEngine interceptionEngine;
+    private final InterceptionEngine interceptionEngine;
+    private final AgentConfig agentConfig;
     private static AgentHelper instance = new AgentHelper();
 
     private AgentHelper() {
 
         interceptionEngine = new DefaultInterceptionEngine();
+        agentConfig = new AgentConfig();
     }
 
     /**
@@ -54,4 +58,8 @@ public class AgentHelper {
         return interceptionEngine;
     }
 
+    public AgentConfig getAgentConfig() {
+
+        return agentConfig;
+    }
 }
