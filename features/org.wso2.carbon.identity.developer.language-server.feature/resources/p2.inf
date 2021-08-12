@@ -1,7 +1,0 @@
-instructions.configure = \
-org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../deployment/);\
-org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../deployment/server/);\
-org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../deployment/server/webapps/);\
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.identity.developer.language-server_${feature.version}/lsp.war,target:${installFolder}/../../deployment/server/webapps/lsp.war,overwrite:true);\
-org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../../lib/);\
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.identity.developer.language-server_${feature.version}/org.wso2.carbon.identity.developer.java-agent-jar-with-dependencies.jar,target:${installFolder}/../../../lib/org.wso2.carbon.identity.developer.java-agent-${feature.version}-jar-with-dependencies.jar,overwrite:true);\

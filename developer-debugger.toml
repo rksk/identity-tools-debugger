@@ -1,0 +1,92 @@
+enabled = true
+
+[db_multi_connection_logger]
+enable = true
+
+[execution_time_logger]
+enable = true
+interceptions = [ "DefaultRequestCoordinator", "SessionDataStore", "AbstractUserStoreManager", "AccessTokenIssuer", "AccessTokenDAOImpl", "RequestObjectDAOImpl", "AuthorizationCodeDAOImpl", "OAuthScopeDAOImpl", "ReceiptDAOImpl", "PurposeDAOImpl", "PurposeCategoryDAOImpl", "PIICategoryDAOImpl"]
+
+# Comment out unwanted interceptions.
+[[interception]]
+name="data_source_proxy"
+class="org.apache.tomcat.jdbc.pool.DataSourceProxy"
+
+[[data_source_proxy]]
+method = "getConnection"
+arguments = []					# Empty for 0 argument and class name for other types
+return = "java.sql.Connection"			# Empty for void and class name for other types.
+
+[[interception]]
+name="DefaultRequestCoordinator"
+class="org.wso2.carbon.identity.application.authentication.framework.handler.request.impl.DefaultRequestCoordinator"
+
+[[DefaultRequestCoordinator]]
+method = "handle"
+arguments = ["javax.servlet.http.HttpServletRequest", "javax.servlet.http.HttpServletResponse"]
+return = ""
+
+[[interception]]
+name="AbstractUserStoreManager"
+class="org.wso2.carbon.user.core.common.AbstractUserStoreManager"
+
+[[AbstractUserStoreManager]]
+method = "authenticate"
+arguments = ["java.lang.String", "java.lang.Object"]
+return = "boolean"
+
+[[interception]]
+name="AccessTokenIssuer"
+class="org.wso2.carbon.identity.oauth2.token.AccessTokenIssuer"
+
+[[AccessTokenIssuer]]
+method = "issue"
+arguments = ["org.wso2.carbon.identity.oauth2.dto.OAuth2AccessTokenReqDTO"]
+return = "org.wso2.carbon.identity.oauth2.dto.OAuth2AccessTokenRespDTO"
+
+[[interception]]
+name="SessionDataStore"
+class="org.wso2.carbon.identity.application.authentication.framework.store.SessionDataStore"
+all_public_methods = true
+
+[[interception]]
+name="AccessTokenDAOImpl"
+class="org.wso2.carbon.identity.oauth2.dao.AccessTokenDAOImpl"
+all_public_methods = true
+
+[[interception]]
+name="RequestObjectDAOImpl"
+class="org.wso2.carbon.identity.openidconnect.dao.RequestObjectDAOImpl"
+all_public_methods = true
+
+
+[[interception]]
+name="AuthorizationCodeDAOImpl"
+class="org.wso2.carbon.identity.oauth2.dao.AuthorizationCodeDAOImpl"
+all_public_methods = true
+
+[[interception]]
+name="OAuthScopeDAOImpl"
+class="org.wso2.carbon.identity.oauth2.dao.OAuthScopeDAOImpl"
+all_public_methods = true
+
+[[interception]]
+name="ReceiptDAOImpl"
+class="org.wso2.carbon.consent.mgt.core.dao.impl.ReceiptDAOImpl"
+all_public_methods = true
+
+[[interception]]
+name="PurposeDAOImpl"
+class="org.wso2.carbon.consent.mgt.core.dao.impl.PurposeDAOImpl"
+all_public_methods = true
+
+[[interception]]
+name="PurposeCategoryDAOImpl"
+class="org.wso2.carbon.consent.mgt.core.dao.impl.PurposeCategoryDAOImpl"
+all_public_methods = true
+
+[[interception]]
+name="PIICategoryDAOImpl"
+class="org.wso2.carbon.consent.mgt.core.dao.impl.PIICategoryDAOImpl"
+all_public_methods = true
+

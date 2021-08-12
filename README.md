@@ -1,17 +1,39 @@
 # identity-tools-debugger
-Tools which helps to communicate with the extension and add functionality intercept with the Identity server 
-It has  two components 
-1. Debugger sever - helps to interact with VSCode Extension.
-2. Java Agent - helps to intercept with the IS server.
+Tools which helps to debug the WSO2 Identity Server performance related issues
+Currently this supports,
+1. Execution time logger - Log time taken to execute defined methods
+2. Database connection logger - Log if any threads occupy more than one connection
+
+# How to build
+Use `mvn clean install`
 
 # How to add debug support to IS
+* Copy `modules/java-agent/target/org.wso2.carbon.identity.developer.java-agent-1.0.0-jar-with-dependencies.jar` to `IS_HOME/lib`
 
-* Modify the startup script to enable agent "wso2server.sh"
-  * please change `<VERSION>` to the version used in the IS.
-
+* Copy
+  `modules/logger/target/org.wso2.carbon.identity.developer.logger-1.0.0.jar` to `IS_HOME/repository/components/dropins/`
+* Copy `developer-debugger.toml` to `IS_HOME/repository/conf`
+* Add the following under JAVA_OPTS to enable agent in `wso2server.sh`. 
 ```
--javaagent:$CARBON_HOME/lib/org.wso2.carbon.identity.developer.java-agent-<VERSION>-jar-with-dependencies.jar \
+    -javaagent:$CARBON_HOME/lib/org.wso2.carbon.identity.developer.java-agent-1.0.0-jar-with-dependencies.jar \
 ```
 * Start the server
-* Play with VS-Code extensions
 
+# How to configure
+We can disable the complete debugger tool, by changing the root `enabled` config
+```toml
+enabled = false
+```
+## Execution time logger
+- If you want to disable the execution time logger, disable execution_time_logger.enable
+```toml
+[execution_time_logger]
+enable = false
+```
+
+## Database connection logger
+- If you want to disable the database connection logger, disable db_multi_connection_logger.enable
+```toml
+[db_multi_connection_logger]
+enable = false
+```
