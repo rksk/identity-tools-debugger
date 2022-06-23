@@ -10,10 +10,12 @@ import org.wso2.carbon.identity.java.agent.host.MethodContext;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.UUID;
 
 public class InterceptionLogger implements InterceptionListener {
 
     private static final ThreadLocal<Stack<Long>> methodBeforeTimes = ThreadLocal.withInitial(Stack::new);
+    private static final ThreadLocal<Stack<String>> methodCorrelations = ThreadLocal.withInitial(Stack::new);
 
     private static final Log log = LogFactory.getLog(InterceptionLogger.class);
 
@@ -22,15 +24,18 @@ public class InterceptionLogger implements InterceptionListener {
 
         switch (type) {
             case METHOD_BEFORE:
+                String methodCorrelation = UUID.randomUUID().toString();
+                methodCorrelations.get().push(methodCorrelation);
                 methodBeforeTimes.get().push(System.currentTimeMillis());
-                log.info( methodContext.getClassName().replaceAll("/", "\\.") + ":" +
-                        methodContext.getMethodName()
-                        + " starting ");
+                log.info("[" + methodCorrelation + "] " + methodContext.getClassName()
+                        .replaceAll("/", "\\.") + ":" + methodContext.getMethodName()
+                        + " starting");
                 break;
             case METHOD_AFTER:
                 Long beforeTime = methodBeforeTimes.get().pop();
-                log.info( methodContext.getClassName().replaceAll("/", "\\.") + ":" +
-                        methodContext.getMethodName()
+                String correlation = methodCorrelations.get().pop();
+                log.info("[" + correlation + "] " + methodContext.getClassName()
+                        .replaceAll("/", "\\.") + ":" + methodContext.getMethodName()
                         + " taken : " + (System.currentTimeMillis() - beforeTime));
         }
     }

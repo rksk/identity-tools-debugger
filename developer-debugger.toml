@@ -1,11 +1,11 @@
 enabled = true
 
 [db_multi_connection_logger]
-enable = true
+enable = false
 
 [execution_time_logger]
 enable = true
-interceptions = [ "DefaultRequestCoordinator", "SessionDataStore", "AbstractUserStoreManager", "AccessTokenIssuer", "AccessTokenDAOImpl", "RequestObjectDAOImpl", "AuthorizationCodeDAOImpl", "OAuthScopeDAOImpl", "ReceiptDAOImpl", "PurposeDAOImpl", "PurposeCategoryDAOImpl", "PIICategoryDAOImpl"]
+interceptions = [ "DefaultRequestCoordinator", "SessionDataStore", "AbstractUserStoreManager", "AccessTokenIssuer", "AccessTokenDAOImpl", "RequestObjectDAOImpl", "AuthorizationCodeDAOImpl", "OAuthScopeDAOImpl", "ReceiptDAOImpl", "PurposeDAOImpl", "PurposeCategoryDAOImpl", "PIICategoryDAOImpl","DefaultStepBasedSequenceHandler","GraphBasedSequenceHandler","JDBCPersistenceManager","UmPersistenceManager"]
 
 # Comment out unwanted interceptions.
 [[interception]]
@@ -20,20 +20,12 @@ return = "java.sql.Connection"			# Empty for void and class name for other types
 [[interception]]
 name="DefaultRequestCoordinator"
 class="org.wso2.carbon.identity.application.authentication.framework.handler.request.impl.DefaultRequestCoordinator"
-
-[[DefaultRequestCoordinator]]
-method = "handle"
-arguments = ["javax.servlet.http.HttpServletRequest", "javax.servlet.http.HttpServletResponse"]
-return = ""
+all_public_methods = true
 
 [[interception]]
 name="AbstractUserStoreManager"
 class="org.wso2.carbon.user.core.common.AbstractUserStoreManager"
-
-[[AbstractUserStoreManager]]
-method = "authenticate"
-arguments = ["java.lang.String", "java.lang.Object"]
-return = "boolean"
+all_public_methods = true
 
 [[interception]]
 name="AccessTokenIssuer"
@@ -90,3 +82,22 @@ name="PIICategoryDAOImpl"
 class="org.wso2.carbon.consent.mgt.core.dao.impl.PIICategoryDAOImpl"
 all_public_methods = true
 
+[[interception]]
+name="DefaultStepBasedSequenceHandler"
+class="org.wso2.carbon.identity.application.authentication.framework.handler.sequence.impl.DefaultStepBasedSequenceHandler"
+all_public_methods = true
+
+[[interception]]
+name="GraphBasedSequenceHandler"
+class="org.wso2.carbon.identity.application.authentication.framework.handler.sequence.impl.GraphBasedSequenceHandler"
+all_public_methods = true
+
+[[interception]]
+name="JDBCPersistenceManager"
+class="org.wso2.carbon.identity.core.persistence.JDBCPersistenceManager"
+all_public_methods = true
+
+[[interception]]
+name="UmPersistenceManager"
+class="org.wso2.carbon.identity.core.persistence.UmPersistenceManager"
+all_public_methods = true
